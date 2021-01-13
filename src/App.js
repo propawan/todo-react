@@ -6,15 +6,18 @@ function App() {
   const [todos, setTodos] = useState([]);
 
   const handleToDos = (text) => {
-    setTodos([{ text, complete: false, key: todos.length }, ...todos]);
+    setTodos([{ text, key: todos.length, complete: false }, ...todos]);
   }
 
   const toggle = (key) => {
-    todos.map((elem, i) => {
+    setTodos(todos.map((elem, i) => {
       if (key === i) {
-        elem.complete = !elem.complete
+        return { ...elem, complete: !elem.complete }
       }
-    })
+      else {
+        return elem;
+      }
+    }))
   }
 
   return (
@@ -22,7 +25,9 @@ function App() {
       <TaskInput addInToDo={handleToDos}></TaskInput>
       <div>
         {
-          todos.map(({ text, key }, i) => <div className="task" key={key} onClick={() => toggle(i)}>{text}</div>)
+          todos.map(({ text, key, complete }, i) => {
+            return (<div key={key} onClick={() => toggle(i)} style={{ textDecoration: complete ? "line-through" : "" }}>{text}</div>);
+          })
         }
       </div>
     </div>
